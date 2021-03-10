@@ -35,20 +35,24 @@
 
       <a-scene background="color: skyblue">
         <a-assets>
-          <a-asset-item id="danse" src="./models/alizee_leo.glb"></a-asset-item>
+          <a-asset-item id="Alizee" src="./models/alizee_leo.glb"></a-asset-item>
+          <a-asset-item id="Zhenya" src="./models/zhenya_cecile.glb"></a-asset-item>
+          <a-asset-item id="Jasmine" src="./models/jasmine_louane.glb"></a-asset-item>
+          <a-asset-item id="Leo" src="./models/leo_alizee.glb"></a-asset-item>
           <img id="thira" crossorigin="anonymous" src="./models/thira.jpg" />
           <audio id="son" src="./models/zorba.mp3" preload="auto" autoplay="true" loop="false"></audio>
         </a-assets>
 
-        <!-- #lumières et evironnement -->
+        <!-- lumières -->
         <a-entity light="type: ambient; color: #CCC; intensity: 1"></a-entity>
         <a-entity light="type: directional; castShadow:true; intensity: 0.5" position="-1 2 1"></a-entity>
 
+        <!-- Danseur.se.s + plan pour ombre -->
         <a-entity id="model3D"
                   scale="1 1 1"
                   position="0.474 0.314 -2"
                   rotation="90 0 -80"
-                  gltf-model="#danse"
+                  gltf-model="#Alizee"
                   animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
                   loaded
                   shadow="cast:true; receive:true"
@@ -59,13 +63,57 @@
   			shadow="receive: true"  " ></a-plane>
 
 
+        <a-entity id="model3D"
+                  scale="1 1 1"
+                  position="0.474 0.314 -2"
+                  rotation="90 0 -80"
+                  gltf-model="#Zhenya"
+                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  loaded
+                  shadow="cast:true; receive:true"
+                  >
+        </a-entity>
+
+        <a-plane position="0.781 0.314 -2.488" rotation="-90 0 0" scale="1.321 1.456 1"
+        shadow="receive: true"  " ></a-plane>
 
 
+        <a-entity id="model3D"
+                  scale="1 1 1"
+                  position="0.474 0.314 -2"
+                  rotation="90 0 -80"
+                  gltf-model="#Jasmine"
+                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  loaded
+                  shadow="cast:true; receive:true"
+                  >
+        </a-entity>
+
+        <a-plane position="0.781 0.314 -2.488" rotation="-90 0 0" scale="1.321 1.456 1"
+        shadow="receive: true"  " ></a-plane>
+
+
+        <a-entity id="model3D"
+                  scale="1 1 1"
+                  position="0.474 0.314 -2"
+                  rotation="90 0 -80"
+                  gltf-model="#Leo"
+                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  loaded
+                  shadow="cast:true; receive:true"
+                  >
+        </a-entity>
+
+        <a-plane position="0.781 0.314 -2.488" rotation="-90 0 0" scale="1.321 1.456 1"
+        shadow="receive: true"  " ></a-plane>
+
+
+      <!-- Environnement -->
 	      <a-sky src="#thira"></a-sky>
 
       </a-scene>
 
-      <!-- GESTION AUDIO -->
+      <!-- Gestion audio -->
       <button id="bouton" style="position: absolute; left: 20px; bottom: 20px;">SON ON</button>
 
       <script>
