@@ -15,11 +15,11 @@
 
     <script>
 			// verifie le chaargement du model 3D
-	      	AFRAME.registerComponent('modele_loaded', {
+	      	AFRAME.registerComponent('modele', {
 	          init: function () {
 	            var el = this.el;
 	            el.addEventListener('model-loaded', () => {
-	              console.log(">>>ça marche pour "+el.id);
+	              console.log(">>>ça marche pour "+ this.el.id);
 	              });
 	            this.el.addEventListener('model-error', () => {
 	                // Grab the mesh / scene.
@@ -27,6 +27,75 @@
 	              });
 	            }
 	      	});
+
+            //indique quand l'anim se termine
+            AFRAME.registerComponent('fini', {
+              init: function() {
+                addEventListener('animation-finished', () => {
+                  console.log(">>>anim terminée");
+
+                });
+              }
+            });
+
+            //indique nb de loop
+            AFRAME.registerComponent('boucle', {
+              init: function() {
+                var nb = 0;
+                addEventListener('animation-loop', () => {
+                  console.log(">>>> loop terminée n°" + nb);
+                  nb++;
+
+                });
+              }
+            });
+
+            AFRAME.registerComponent('pas', {
+              init: function() {
+                var el = this.el;
+                var pas = 1;
+                var vitesse = 0.5;
+                var action = ["pas_01", "pas_02", "pas_03", "pas_04", "pas_05"]
+                el.addEventListener('animation-finished', () => {
+
+                  if (pas < 5) {
+                    //il ne prend pas en compte le repetitions suivant
+
+                    el.removeAttribute("animation-mixer");
+                    el.setAttribute("animation-mixer", "clip:" + action[pas]);
+                    el.setAttribute("animation-mixer", "repetitions: 3");
+                    pas++;
+
+                  } else {
+                    console.log("rentré dans le else");
+
+
+                    function getRandomInt(max) {
+                      return Math.floor(Math.random() * Math.floor(max));
+                    }
+                    var temporaire = (getRandomInt(4));
+                    console.log("premier tirage " + temporaire);
+
+                    //ne pas faire rejouer une anim
+                    while (temporaire == random) {
+                      var temporaire = (getRandomInt(4));
+                      console.log("nouvelle valeur " + temporaire);
+                    }
+                    var random = temporaire;
+                    console.log("valeur de random " + random);
+                    //Fin de la boucle
+
+                    //appelle des anims
+                    el.removeAttribute("animation-mixer");
+                    el.setAttribute("animation-mixer", "clip:" + action[random]);
+                    el.setAttribute("animation-mixer", "loop: once");
+
+
+                  }
+                });
+              }
+            });
+          </script>
 
 	    </script>
   </head>
@@ -53,8 +122,11 @@
                   position="0.474 0.314 -2"
                   rotation="90 0 -80"
                   gltf-model="#Alizee"
-                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
-                  loaded
+                  animation-mixer="clip: pas_03 ; repetitions : 4 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  modele
+                  fini
+                  boucle
+                  pas
                   shadow="cast:true; receive:true"
                   >
         </a-entity>
@@ -68,8 +140,11 @@
                   position="0.474 0.856 -4"
                   rotation="90 0 -180"
                   gltf-model="#Zhenya"
-                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
-                  loaded
+                  animation-mixer="clip: pas_03 ; repetitions : 4 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  modele
+                  fini
+                  boucle
+                  pas
                   shadow="cast:true; receive:true"
                   >
         </a-entity>
@@ -83,8 +158,11 @@
                   position="1 -1.1 1.281"
                   rotation="90 0 90"
                   gltf-model="#Jasmine"
-                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
-                  loaded
+                  animation-mixer="clip: pas_03 ; repetitions : 4 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  modele
+                  fini
+                  boucle
+                  pas
                   shadow="cast:true; receive:true"
                   >
         </a-entity>
@@ -98,8 +176,11 @@
                   position="1.162 -1.767 4.021"
                   rotation="90 0 -100"
                   gltf-model="#Leo"
-                  animation-mixer="clip: pas_03 ; repetitions : 10 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
-                  loaded
+                  animation-mixer="clip: pas_03 ; repetitions : 4 ; timeScale : 2 ; crossFadeDuration : 0 ; clampWhenFinished : true"
+                  modele
+                  fini
+                  boucle
+                  pas
                   shadow="cast:true; receive:true"
                   >
         </a-entity>
@@ -125,28 +206,26 @@
 
           unlockAudioIOS(contexteAudio); // ok pour context = AudioContext;
 
-          function resumeAudio() {
-              console.log(contexteAudio.state);
+      function resumeAudio() {
+        console.log(contexteAudio.state);
 
-              if(contexteAudio.state == "suspended")
-              {
-                    contexteAudio.resume();
-                    console.log('Playback resumed successfully');
-                    son_zorba.play();
-                    b.innerHTML = "SON OFF";
-                    console.log("SON OFF");
-              }
-              else {
-                    contexteAudio.suspend();
-                    console.log('Playback paused successfully');
-                    son_zorba.pause();
-                    b.innerHTML = "SON ON";
-                    console.log("SON ON");
-              }
-              //document.removeEventListener("click", resumeAudio);
-          }
-          b.onclick = resumeAudio;
-      </script>
+        if (contexteAudio.state == "suspended") {
+          contexteAudio.resume();
+          console.log('Playback resumed successfully');
+          son_zorba.play();
+          b.innerHTML = "STOP";
+          console.log("STOP CONSOLE");
+        } else {
+          contexteAudio.suspend();
+          console.log('Playback paused successfully');
+          son_zorba.pause();
+          b.innerHTML = "PLAY";
+          console.log("PLAY CONSOLE");
+        }
+        //document.removeEventListener("click", resumeAudio);
+      }
+      b.onclick = resumeAudio;
+    </script>
 
 
 
