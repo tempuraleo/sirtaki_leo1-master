@@ -1,10 +1,5 @@
-<!-- https://github.com/jgbarah/aframe-playground/tree/master/moving-01 -->
-<!-- Fox : https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Fox -->
-<!-- animations : dans le gltf "name":  pas_01_d /  pas_04_f /   -->
-<!DOCTYPE html>
-
-
 <html lang="fr">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-C ompatible" content="IE=edge">
@@ -14,7 +9,6 @@
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.0.1/dist/aframe-extras.min.js"></script>
 
     <script>
-			// verifie le chaargement du model 3D
 	      	AFRAME.registerComponent('modele', {
 	          init: function () {
 	            var el = this.el;
@@ -22,13 +16,11 @@
 	              console.log(">>>ça marche pour "+ this.el.id);
 	              });
 	            this.el.addEventListener('model-error', () => {
-	                // Grab the mesh / scene.
 	                console.log(">>>modèle erreur");
 	              });
 	            }
 	      	});
 
-            //indique quand l'anim se termine
             AFRAME.registerComponent('fini', {
               init: function() {
                 addEventListener('animation-finished', () => {
@@ -38,7 +30,6 @@
               }
             });
 
-            //indique nb de loop
             AFRAME.registerComponent('boucle', {
               init: function() {
                 var nb = 0;
@@ -59,8 +50,6 @@
                 el.addEventListener('animation-finished', () => {
 
                   if (pas < 5) {
-                    //il ne prend pas en compte le repetitions suivant
-
                     el.removeAttribute("animation-mixer");
                     el.setAttribute("animation-mixer", "clip:" + action[pas]);
                     el.setAttribute("animation-mixer", "repetitions: 3");
@@ -76,16 +65,13 @@
                     var temporaire = (getRandomInt(4));
                     console.log("premier tirage " + temporaire);
 
-                    //ne pas faire rejouer une anim
                     while (temporaire == random) {
                       var temporaire = (getRandomInt(4));
                       console.log("nouvelle valeur " + temporaire);
                     }
                     var random = temporaire;
                     console.log("valeur de random " + random);
-                    //Fin de la boucle
 
-                    //appelle des anims
                     el.removeAttribute("animation-mixer");
                     el.setAttribute("animation-mixer", "clip:" + action[random]);
                     el.setAttribute("animation-mixer", "loop: once");
@@ -195,35 +181,36 @@
       </a-scene>
 
       <!-- Gestion audio -->
-      <button id="bouton" style="position: absolute; left: 20px; bottom: 20px;">EN AVANT LA MUSIQUE!</button>
+       <button id="bouton" style="position: absolute; left: 20px; bottom: 20px;">EN AVANT LA MUSIQUE!</button>
 
-      <script>
-          var b = document.querySelector('#bouton');
-          var son_zorba = document.querySelector('#son');
+       <script>
+           var b = document.querySelector('#bouton');
+           var son_zorba = document.querySelector('#son');
 
-          var AudioContext = window.AudioContext || window.webkitAudioContext;
-          var contexteAudio = new AudioContext;
+           var AudioContext = window.AudioContext || window.webkitAudioContext;
+           var contexteAudio = new AudioContext;
 
-          unlockAudioIOS(contexteAudio); // ok pour context = AudioContext;
+           unlockAudioIOS(contexteAudio); // ok pour context = AudioContext;
 
-      function resumeAudio() {
-        console.log(contexteAudio.state);
+       function resumeAudio() {
+         console.log(contexteAudio.state);
 
-        if (contexteAudio.state == "suspended") {
-          contexteAudio.resume();
-          console.log('Playback resumed successfully');
-          son_zorba.play();
-          b.innerHTML = "STOP";
-          console.log("STOP CONSOLE");
-        } else {
-          contexteAudio.suspend();
-          console.log('Playback paused successfully');
-          son_zorba.pause();
-          b.innerHTML = "PLAY";
-          console.log("PLAY CONSOLE");
-        }
-        //document.removeEventListener("click", resumeAudio);
-      }
+         if (contexteAudio.state == "suspended") {
+           contexteAudio.resume();
+           console.log('Playback resumed successfully');
+           son_zorba.play();
+           b.innerHTML = "STOP";
+           console.log("STOP CONSOLE");
+         } else {
+           contexteAudio.suspend();
+           console.log('Playback paused successfully');
+           son_zorba.pause();
+           b.innerHTML = "PLAY";
+           console.log("PLAY CONSOLE");
+         }
+         //document.removeEventListener("click", resumeAudio);
+       }
+
       b.onclick = resumeAudio;
     </script>
 
